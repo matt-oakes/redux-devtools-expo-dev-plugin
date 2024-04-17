@@ -1,5 +1,5 @@
 {
-  "name": "redux-devtools-expo-webui",
+  "name": "redux-devtools-expo-dev-plugin-webui",
   "version": "0.0.1-private",
   "main": "node_modules/expo/AppEntry.js",
   "private": true,

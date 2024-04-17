@@ -6,7 +6,7 @@ The full [Redux DevTools](https://github.com/reduxjs/redux-devtools/) (from the 
 - Live list of actions and how it affects the state.
 - Ability to rewind, replay, and dispatch actions from the devtools.
 
-![Demo of redux-devtools-expo](./.github/images/demo.gif)
+![Demo of redux-devtools-expo-dev-plugin](./.github/images/demo.gif)
 
 ## Installation
 
@@ -19,13 +19,13 @@ For bare React Native projects, you must ensure that you have [installed and con
 If you are setup with Expo Dev Plugins, then you can install the package using these commands and then follow the usage guide below.
 
 ```
-npm install redux-devtools-expo
+npm install redux-devtools-expo-dev-plugin
 ```
 
 or with Yarn:
 
 ```
-yarn install redux-devtools-expo
+yarn install redux-devtools-expo-dev-plugin
 ```
 
 ### Link the DevTools to Redux
@@ -51,7 +51,7 @@ with:
 
 ```javascript
 import { createStore } from "redux";
-import { devToolsEnhancer } from "redux-devtools-expo";
+import { devToolsEnhancer } from "redux-devtools-expo-dev-plugin";
 const store = createStore(reducer, devToolsEnhancer());
 // or const store = createStore(reducer, preloadedState, devToolsEnhancer());
 ```
@@ -60,7 +60,7 @@ or with options:
 
 ```javascript
 import { createStore } from "redux";
-import { devToolsEnhancer } from "redux-devtools-expo";
+import { devToolsEnhancer } from "redux-devtools-expo-dev-plugin";
 const store = createStore(reducer, devToolsEnhancer({ trace: true }));
 ```
 
@@ -89,7 +89,7 @@ to:
 
 ```javascript
 import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-expo";
+import { composeWithDevTools } from "redux-devtools-expo-dev-plugin";
 
 const store = createStore(
   reducer,
@@ -104,7 +104,7 @@ or with options:
 
 ```javascript
 import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-expo";
+import { composeWithDevTools } from "redux-devtools-expo-dev-plugin";
 
 const composeEnhancers = composeWithDevTools({ trace: true });
 const store = createStore(
@@ -118,7 +118,7 @@ const store = createStore(
 
 ## Using the DevTools
 
-Once you have followed the installation instructions above, you need to restart the Expo CLI and reload your app. Once it has loaded you need to open the `More tools` menu in the Expo CLI with `shift+m` and then select `Open devtools plugin - redux-devtools-expo`.
+Once you have followed the installation instructions above, you need to restart the Expo CLI and reload your app. Once it has loaded you need to open the `More tools` menu in the Expo CLI with `shift+m` and then select `Open devtools plugin - redux-devtools-expo-dev-plugin`.
 
 This will open a browser window with the Redux DevTools link to your app. As actions are dispatched you can view them, along with the changes in state. You can also dispatch actions directly from the web interface with the "dispatcher" button in the bottom bar.
 

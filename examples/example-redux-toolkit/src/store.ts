@@ -1,5 +1,5 @@
 import { createStore, createSlice, combineSlices } from "@reduxjs/toolkit";
-import devToolsEnhancer from "redux-devtools-expo";
+import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 
 export const counterSlice = createSlice({
   name: "counter",

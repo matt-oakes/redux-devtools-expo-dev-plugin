@@ -1,8 +1,8 @@
 {
-  "name": "redux-devtools-expo",
+  "name": "redux-devtools-expo-dev-plugin",
   "version": "0.0.4",
   "description": "The full Redux DevTools for Expo as a dev plugin",
-  "homepage": "https://github.com/matt-oakes/redux-devtools-expo",
+  "homepage": "https://github.com/matt-oakes/redux-devtools-expo-dev-plugin",
   "license": "MIT",
   "main": "build/index.js",
   "types": "build/index.d.ts",

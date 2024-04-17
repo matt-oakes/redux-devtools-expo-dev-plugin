@@ -205,7 +205,7 @@ class DevToolsEnhancer<S, A extends Action<string>> {
   send = () => {
     if (!this.sendTo) {
       console.log(
-        "redux-devtools-expo: Cannot send message from sendOn or sendOnError without a sendTo URL being provided",
+        "redux-devtools-expo-dev-plugin: Cannot send message from sendOn or sendOnError without a sendTo URL being provided",
       );
       return;
     }
@@ -385,10 +385,8 @@ class DevToolsEnhancer<S, A extends Action<string>> {
     (async () => {
       try {
         this.devToolsPluginClient = await getDevToolsPluginClientAsync(
-          "redux-devtools-expo",
+          "redux-devtools-expo-dev-plugin",
         );
-
-        // TODO: Do we need to handle connection and disconnection?
 
         this.devToolsPluginClient.addMessageListener(
           "respond",
@@ -407,49 +405,6 @@ class DevToolsEnhancer<S, A extends Action<string>> {
         this.stop();
       }
     })();
-
-    // this.socket = socketClusterClient.create(this.socketOptions);
-
-    // (async () => {
-    //   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    //   for await (const data of this.socket!.listener("error")) {
-    //     // if we've already had this error before, increment it's counter, otherwise assign it '1' since we've had the error once.
-    //     // eslint-disable-next-line no-prototype-builtins,@typescript-eslint/no-unsafe-argument
-    //     this.errorCounts[data.error.name] = this.errorCounts.hasOwnProperty(
-    //       data.error.name,
-    //     )
-    //       ? this.errorCounts[data.error.name] + 1
-    //       : 1;
-
-    //     if (this.suppressConnectErrors) {
-    //       if (this.errorCounts[data.error.name] === 1) {
-    //         console.log(
-    //           "redux-devtools-expo: Socket connection errors are being suppressed. " +
-    //             "\n" +
-    //             "This can be disabled by setting suppressConnectErrors to 'false'.",
-    //         );
-    //         console.log(data.error);
-    //       }
-    //     } else {
-    //       console.log(data.error);
-    //     }
-    //   }
-    // })();
-
-    // (async () => {
-    //   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    //   for await (const data of this.socket!.listener("connect")) {
-    //     console.log("connected to remotedev-server");
-    //     this.errorCounts = {}; // clear the errorCounts object, so that we'll log any new errors in the event of a disconnect
-    //     this.login();
-    //   }
-    // })();
-    // (async () => {
-    //   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    //   for await (const data of this.socket!.listener("disconnect")) {
-    //     this.stop(true);
-    //   }
-    // })();
   };
 
   checkForReducerErrors = (liftedState = this.getLiftedStateRaw()) => {

@@ -130,7 +130,7 @@ async function connect() {
   if (process.env.NODE_ENV === "test") return;
   try {
     devToolsPluginClient = await getDevToolsPluginClientAsync(
-      "redux-devtools-expo",
+      "redux-devtools-expo-dev-plugin",
     );
 
     const watcher = (request: UpdateReportsRequest) => {
@@ -145,7 +145,7 @@ async function connect() {
   } catch (error) {
     // TODO: Handle errors better?
     console.warn(
-      "redux-devtools-expo: Error while connecting to Expo dev tools client " +
+      "redux-devtools-expo-dev-plugin: Error while connecting to Expo dev tools client " +
         error,
     );
   }

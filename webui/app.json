@@ -4,7 +4,7 @@
       "bundler": "metro"
     },
     "experiments": {
-      "baseUrl": "/_expo/plugins/redux-devtools-expo"
+      "baseUrl": "/_expo/plugins/redux-devtools-expo-dev-plugin"
     }
   }
 }
