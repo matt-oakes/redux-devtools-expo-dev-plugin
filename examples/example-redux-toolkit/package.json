@@ -1,0 +1,26 @@
+{
+  "name": "example-redux-toolkit",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.2.3",
+    "expo": "~50.0.17",
+    "expo-status-bar": "~1.11.1",
+    "react": "18.2.0",
+    "react-native": "0.73.6",
+    "react-redux": "^9.1.1",
+    "redux-devtools-expo": "^0.0.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@types/react": "~18.2.79",
+    "typescript": "^5.4.5"
+  },
+  "private": true
+}
