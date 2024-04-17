@@ -1,3 +1,5 @@
+import { compose } from "redux";
+
 declare global {
   const process: {
     env: {
@@ -6,10 +8,15 @@ declare global {
   };
 }
 
-export let useReduxDevTools: typeof import("./useReduxDevTools").useReduxDevTools;
+export let composeWithDevTools: typeof import("./devtools").composeWithDevTools;
+let devtoolsEnhancer: typeof import("./devtools").default;
 
 if (process.env.NODE_ENV !== "production") {
-  useReduxDevTools = require("./useReduxDevTools").useReduxDevTools;
+  devtoolsEnhancer = require("./devtools").default;
+  composeWithDevTools = require("./devtools").composeWithDevTools;
 } else {
-  useReduxDevTools = () => {};
+  devtoolsEnhancer = () => undefined;
+  composeWithDevTools = compose;
 }
+
+export default devtoolsEnhancer;

@@ -1,4 +1,4 @@
-# Expo Redux DevTools
+# Redux DevTools for Expo
 
 The full Redux DevTools for Expo as a dev plugin
 
@@ -18,5 +18,5 @@ For bare React Native projects, you must ensure that you have [installed and con
 ### Add the package to your npm dependencies
 
 ```
-npm install expo-redux-devtools
+npm install redux-devtools-expo
 ```

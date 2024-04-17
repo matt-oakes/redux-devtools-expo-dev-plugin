@@ -1,0 +1,22 @@
+diff --git a/node_modules/@redux-devtools/rtk-query-monitor/lib/esm/components/QueryPreviewInfo.js b/node_modules/@redux-devtools/rtk-query-monitor/lib/esm/components/QueryPreviewInfo.js
+index 7e9753b..9d940b1 100644
+--- a/node_modules/@redux-devtools/rtk-query-monitor/lib/esm/components/QueryPreviewInfo.js
++++ b/node_modules/@redux-devtools/rtk-query-monitor/lib/esm/components/QueryPreviewInfo.js
+@@ -1,5 +1,5 @@
+ import { createSelector } from '@reduxjs/toolkit';
+-import { QueryStatus } from '@reduxjs/toolkit/dist/query';
++import { QueryStatus } from '@reduxjs/toolkit/query';
+ import React, { PureComponent } from 'react';
+ import { QueryPreviewTabs } from '../types';
+ import { renderTabPanelButtonId, renderTabPanelId } from '../utils/a11y';
+diff --git a/node_modules/@redux-devtools/rtk-query-monitor/src/components/QueryPreviewInfo.tsx b/node_modules/@redux-devtools/rtk-query-monitor/src/components/QueryPreviewInfo.tsx
+index 510b3dc..8202c62 100644
+--- a/node_modules/@redux-devtools/rtk-query-monitor/src/components/QueryPreviewInfo.tsx
++++ b/node_modules/@redux-devtools/rtk-query-monitor/src/components/QueryPreviewInfo.tsx
+@@ -1,5 +1,5 @@
+ import { createSelector, Selector } from '@reduxjs/toolkit';
+-import { QueryStatus } from '@reduxjs/toolkit/dist/query';
++import { QueryStatus } from '@reduxjs/toolkit/query';
+ import React, { ReactNode, PureComponent } from 'react';
+ import type { ShouldExpandNodeInitially } from 'react-json-tree';
+ import { QueryPreviewTabs, RtkResourceInfo, RTKStatusFlags } from '../types';
