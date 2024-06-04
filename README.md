@@ -25,7 +25,7 @@ npm install redux-devtools-expo-dev-plugin
 or with Yarn:
 
 ```
-yarn install redux-devtools-expo-dev-plugin
+yarn add redux-devtools-expo-dev-plugin
 ```
 
 ### Link the DevTools to Redux
