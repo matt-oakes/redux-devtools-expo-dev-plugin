@@ -1,12 +1,5 @@
+/// <reference types="node" />
 import { compose } from "redux";
-
-declare global {
-  const process: {
-    env: {
-      NODE_ENV: "development" | "production";
-    };
-  };
-}
 
 export let composeWithDevTools: typeof import("./devtools").composeWithDevTools;
 let devtoolsEnhancer: typeof import("./devtools").default;
