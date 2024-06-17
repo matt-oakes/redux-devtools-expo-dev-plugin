@@ -30,7 +30,7 @@ yarn add redux-devtools-expo-dev-plugin
 
 ### Link the DevTools to Redux
 
-There are 3 ways of using this package depending if you're using Redux Toolkit, or standard Redux with other store enhancers (middlewares) or not.
+There are multiple ways of using this package depending if you're using Redux Toolkit, or standard Redux with other store enhancers (middlewares) or not.
 
 #### Using Redux Toolkit
 Let's suppose your store looks something like this:
@@ -76,6 +76,84 @@ const store = configureStore({
   reducer: rootReducer,
   middleware: getDefaultMiddleware => getDefaultMiddleware(defaultMiddlewareOptions),
 });
+```
+
+#### `redux` without other enhancers
+
+If you have the legacy basic [store](http://redux.js.org/docs/api/createStore.html) as described in the official [redux-docs](http://redux.js.org/index.html), simply replace:
+
+```javascript
+import { createStore } from "redux";
+const store = createStore(reducer);
+```
+
+with:
+
+```javascript
+import { createStore } from "redux";
+import { devToolsEnhancer } from "redux-devtools-expo-dev-plugin";
+const store = createStore(reducer, devToolsEnhancer());
+// or const store = createStore(reducer, preloadedState, devToolsEnhancer());
+```
+
+or with options:
+
+```javascript
+import { createStore } from "redux";
+import { devToolsEnhancer } from "redux-devtools-expo-dev-plugin";
+const store = createStore(reducer, devToolsEnhancer({ trace: true }));
+```
+
+> Note: passing enhancer as last argument requires redux@>=3.1.0
+
+#### `redux` with other enhancers
+
+If you setup your store with [middlewares and enhancers](http://redux.js.org/docs/api/applyMiddleware.html) like [redux-saga](https://github.com/redux-saga/redux-saga) and similar, it is crucial to use `composeWithDevTools` export. Otherwise, actions dispatched from Redux DevTools will not flow to your middlewares.
+
+In that case change this:
+
+```javascript
+import { createStore, applyMiddleware, compose } from "redux";
+
+const store = createStore(
+  reducer,
+  preloadedState,
+  compose(
+    applyMiddleware(...middleware),
+    // other store enhancers if any
+  ),
+);
+```
+
+to:
+
+```javascript
+import { createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-expo-dev-plugin";
+
+const store = createStore(
+  reducer,
+  /* preloadedState, */ composeWithDevTools(
+    applyMiddleware(...middleware),
+    // other store enhancers if any
+  ),
+);
+```
+
+or with options:
+
+```javascript
+import { createStore, applyMiddleware } from "redux";
+import { composeWithDevTools } from "redux-devtools-expo-dev-plugin";
+
+const composeEnhancers = composeWithDevTools({ trace: true });
+const store = createStore(
+  reducer,
+  /* preloadedState, */ composeEnhancers(
+    applyMiddleware(...middleware),
+    // other store enhancers if any
+  ),
+);
 ```
 
 ## Using the DevTools
