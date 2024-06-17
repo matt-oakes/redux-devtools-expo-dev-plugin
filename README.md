@@ -33,87 +33,49 @@ yarn add redux-devtools-expo-dev-plugin
 There are 3 ways of using this package depending if you're using Redux Toolkit, or standard Redux with other store enhancers (middlewares) or not.
 
 #### Using Redux Toolkit
+Let's suppose your store looks something like this:
 
-To properly install using Redux Toolkit you need to wrap all of the default middleware and enhancers with the `composeWithDevTools` function. Unfortunately, it's not currently possible to do this while using `configureStore`, as it does not expose the ability to do this.
+```ts
+import { configureStore } from '@reduxjs/toolkit';
 
-Currently you will need to revert to using the legacy `createStore` method and use the instructions below. I have opened an issue with the Redux Toolkit maintainers to resolve this issue.
+const defaultMiddlewareOptions = {
+  serializableCheck: false,
+  immutableCheck,
+};
 
-#### `redux` without other enhancers
+const middlewares = [apiSlice.middleware, resourcesApiSlice.middleware];
 
-If you have a basic [store](http://redux.js.org/docs/api/createStore.html) as described in the official [redux-docs](http://redux.js.org/index.html), simply replace:
-
-```javascript
-import { createStore } from "redux";
-const store = createStore(reducer);
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware => getDefaultMiddleware(defaultMiddlewareOptions).concat(middlewares),
+});
 ```
 
-with:
+After adding the plugin it should look something like this:
 
-```javascript
-import { createStore } from "redux";
-import { devToolsEnhancer } from "redux-devtools-expo-dev-plugin";
-const store = createStore(reducer, devToolsEnhancer());
-// or const store = createStore(reducer, preloadedState, devToolsEnhancer());
-```
 
-or with options:
+```ts
+import { StoreEnhancer, configureStore } from '@reduxjs/toolkit';
+import devToolsEnhancer from 'redux-devtools-expo-dev-plugin';
+import { applyMiddleware } from '@reduxjs/toolkit';
 
-```javascript
-import { createStore } from "redux";
-import { devToolsEnhancer } from "redux-devtools-expo-dev-plugin";
-const store = createStore(reducer, devToolsEnhancer({ trace: true }));
-```
+const defaultMiddlewareOptions = {
+  serializableCheck: false,
+  immutableCheck,
+};
 
-> Note: passing enhancer as last argument requires redux@>=3.1.0
-
-#### `redux` with other enhancers
-
-If you setup your store with [middlewares and enhancers](http://redux.js.org/docs/api/applyMiddleware.html) like [redux-saga](https://github.com/redux-saga/redux-saga) and similar, it is crucial to use `composeWithDevTools` export. Otherwise, actions dispatched from Redux DevTools will not flow to your middlewares.
-
-In that case change this:
-
-```javascript
-import { createStore, applyMiddleware, compose } from "redux";
-
-const store = createStore(
-  reducer,
-  preloadedState,
-  compose(
-    applyMiddleware(...middleware),
-    // other store enhancers if any
-  ),
+const middlewareEnhancer = applyMiddleware(
+  apiSlice.middleware,
+  resourcesApiSlice.middleware,
+  resetToolbarMiddleware
 );
-```
 
-to:
-
-```javascript
-import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-expo-dev-plugin";
-
-const store = createStore(
-  reducer,
-  /* preloadedState, */ composeWithDevTools(
-    applyMiddleware(...middleware),
-    // other store enhancers if any
-  ),
-);
-```
-
-or with options:
-
-```javascript
-import { createStore, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-expo-dev-plugin";
-
-const composeEnhancers = composeWithDevTools({ trace: true });
-const store = createStore(
-  reducer,
-  /* preloadedState, */ composeEnhancers(
-    applyMiddleware(...middleware),
-    // other store enhancers if any
-  ),
-);
+const store = configureStore({
+  enhancers: getDefaultEnhancers =>
+    getDefaultEnhancers().concat(middlewareEnhancer, devToolsEnhancer() as StoreEnhancer),
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware => getDefaultMiddleware(defaultMiddlewareOptions),
+});
 ```
 
 ## Using the DevTools
