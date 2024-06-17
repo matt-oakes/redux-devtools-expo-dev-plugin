@@ -30,17 +30,57 @@ yarn add redux-devtools-expo-dev-plugin
 
 ### Link the DevTools to Redux
 
-There are 3 ways of using this package depending if you're using Redux Toolkit, or standard Redux with other store enhancers (middlewares) or not.
+There are multiple ways of using this package depending if you're using Redux Toolkit, or standard Redux with other store enhancers (middlewares) or not.
 
 #### Using Redux Toolkit
+Let's suppose your store looks something like this:
 
-To properly install using Redux Toolkit you need to wrap all of the default middleware and enhancers with the `composeWithDevTools` function. Unfortunately, it's not currently possible to do this while using `configureStore`, as it does not expose the ability to do this.
+```ts
+import { configureStore } from '@reduxjs/toolkit';
 
-Currently you will need to revert to using the legacy `createStore` method and use the instructions below. I have opened an issue with the Redux Toolkit maintainers to resolve this issue.
+const defaultMiddlewareOptions = {
+  serializableCheck: false,
+  immutableCheck,
+};
+
+const middlewares = [apiSlice.middleware, resourcesApiSlice.middleware];
+
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware => getDefaultMiddleware(defaultMiddlewareOptions).concat(middlewares),
+});
+```
+
+After adding the plugin it should look something like this:
+
+
+```ts
+import { StoreEnhancer, configureStore } from '@reduxjs/toolkit';
+import devToolsEnhancer from 'redux-devtools-expo-dev-plugin';
+import { applyMiddleware } from '@reduxjs/toolkit';
+
+const defaultMiddlewareOptions = {
+  serializableCheck: false,
+  immutableCheck,
+};
+
+const middlewareEnhancer = applyMiddleware(
+  apiSlice.middleware,
+  resourcesApiSlice.middleware,
+  resetToolbarMiddleware
+);
+
+const store = configureStore({
+  enhancers: getDefaultEnhancers =>
+    getDefaultEnhancers().concat(middlewareEnhancer, devToolsEnhancer() as StoreEnhancer),
+  reducer: rootReducer,
+  middleware: getDefaultMiddleware => getDefaultMiddleware(defaultMiddlewareOptions),
+});
+```
 
 #### `redux` without other enhancers
 
-If you have a basic [store](http://redux.js.org/docs/api/createStore.html) as described in the official [redux-docs](http://redux.js.org/index.html), simply replace:
+If you have the legacy basic [store](http://redux.js.org/docs/api/createStore.html) as described in the official [redux-docs](http://redux.js.org/index.html), simply replace:
 
 ```javascript
 import { createStore } from "redux";
