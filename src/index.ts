@@ -1,4 +1,4 @@
-import { compose } from "redux";
+import { compose } from "@reduxjs/toolkit";
 
 declare global {
   const process: {

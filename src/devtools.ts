@@ -17,18 +17,18 @@ import {
   LocalFilter,
   State,
 } from "@redux-devtools/utils";
-import { StoreEnhancer } from "@reduxjs/toolkit";
+import {
+  Action,
+  ActionCreator,
+  Reducer,
+  StoreEnhancer,
+  StoreEnhancerStoreCreator,
+} from "@reduxjs/toolkit";
 import {
   DevToolsPluginClient,
   getDevToolsPluginClientAsync,
 } from "expo/devtools";
 import { stringify, parse } from "jsan";
-import {
-  Action,
-  ActionCreator,
-  Reducer,
-  StoreEnhancerStoreCreator,
-} from "redux";
 
 import configureStore from "./configureStore";
 
