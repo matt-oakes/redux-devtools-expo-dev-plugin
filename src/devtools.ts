@@ -17,6 +17,7 @@ import {
   LocalFilter,
   State,
 } from "@redux-devtools/utils";
+import { StoreEnhancer } from "@reduxjs/toolkit";
 import {
   DevToolsPluginClient,
   getDevToolsPluginClientAsync,
@@ -26,7 +27,6 @@ import {
   Action,
   ActionCreator,
   Reducer,
-  StoreEnhancer,
   StoreEnhancerStoreCreator,
 } from "redux";
 

@@ -55,7 +55,7 @@ After adding the plugin it should look something like this:
 
 
 ```ts
-import { StoreEnhancer, configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import devToolsEnhancer from 'redux-devtools-expo-dev-plugin';
 import { applyMiddleware } from '@reduxjs/toolkit';
 
@@ -72,7 +72,7 @@ const middlewareEnhancer = applyMiddleware(
 
 const store = configureStore({
   enhancers: getDefaultEnhancers =>
-    getDefaultEnhancers().concat(middlewareEnhancer, devToolsEnhancer() as StoreEnhancer),
+    getDefaultEnhancers().concat(middlewareEnhancer, devToolsEnhancer()),
   reducer: rootReducer,
   middleware: getDefaultMiddleware => getDefaultMiddleware(defaultMiddlewareOptions),
 });
