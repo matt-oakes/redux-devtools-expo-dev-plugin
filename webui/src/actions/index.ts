@@ -2,7 +2,7 @@ import {
   CoreStoreActionWithoutUpdateStateOrLiftedAction,
   LiftedActionAction,
   UpdateStateAction,
-} from "@mattoakes/redux-devtools-app-core";
+} from "@redux-devtools/app-core";
 
 import { EMIT } from "../constants/socketActionTypes";
 

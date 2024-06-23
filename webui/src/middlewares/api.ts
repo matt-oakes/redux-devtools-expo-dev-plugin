@@ -9,7 +9,7 @@ import {
   UPDATE_REPORTS,
   UPDATE_STATE,
   UpdateReportsRequest,
-} from "@mattoakes/redux-devtools-app-core";
+} from "@redux-devtools/app-core";
 import {
   DevToolsPluginClient,
   getDevToolsPluginClientAsync,

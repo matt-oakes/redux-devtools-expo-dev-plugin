@@ -1,4 +1,4 @@
-import { App } from "@mattoakes/redux-devtools-app-core";
+import { App } from "@redux-devtools/app-core";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 

@@ -1,7 +1,4 @@
-import {
-  CoreStoreState,
-  coreReducers,
-} from "@mattoakes/redux-devtools-app-core";
+import { CoreStoreState, coreReducers } from "@redux-devtools/app-core";
 import { combineReducers } from "redux";
 
 import { StoreAction } from "../actions";

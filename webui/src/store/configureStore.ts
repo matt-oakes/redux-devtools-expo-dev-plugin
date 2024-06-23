@@ -1,4 +1,4 @@
-import { middlewares } from "@mattoakes/redux-devtools-app-core";
+import { middlewares } from "@redux-devtools/app-core";
 import localForage from "localforage";
 import { createStore, compose, applyMiddleware } from "redux";
 import { persistReducer, persistStore } from "redux-persist";

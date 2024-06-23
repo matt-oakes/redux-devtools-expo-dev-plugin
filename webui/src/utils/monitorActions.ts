@@ -1,12 +1,12 @@
-import difference from "lodash/difference";
-import omit from "lodash/omit";
 import {
   DispatchAction,
   InstancesState,
   SET_STATE,
   State,
   stringifyJSON,
-} from "@mattoakes/redux-devtools-app-core";
+} from "@redux-devtools/app-core";
+import difference from "lodash/difference";
+import omit from "lodash/omit";
 import { Dispatch, MiddlewareAPI } from "redux";
 import { StoreActionWithoutLiftedAction } from "../actions";
 
