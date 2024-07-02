@@ -55,9 +55,7 @@ After adding the plugin it should look something like this:
 
 
 ```ts
-import { StoreEnhancer, configureStore } from '@reduxjs/toolkit';
-import devToolsEnhancer from 'redux-devtools-expo-dev-plugin';
-import { applyMiddleware } from '@reduxjs/toolkit';
+import { StoreEnhancer, configureStore, applyMiddleware } from '@reduxjs/toolkit';
 
 const defaultMiddlewareOptions = {
   serializableCheck: false,
@@ -67,12 +65,19 @@ const defaultMiddlewareOptions = {
 const middlewareEnhancer = applyMiddleware(
   apiSlice.middleware,
   resourcesApiSlice.middleware,
-  resetToolbarMiddleware
+  otherMiddleWare
 );
 
+let enhancers: StoreEnhancer[] = [middlewareEnhancer];
+
+if (__DEV__) {
+  const devToolsEnhancer = require('redux-devtools-expo-dev-plugin').default;
+
+  enhancers.push(devToolsEnhancer());
+}
+
 const store = configureStore({
-  enhancers: getDefaultEnhancers =>
-    getDefaultEnhancers().concat(middlewareEnhancer, devToolsEnhancer() as StoreEnhancer),
+  enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(enhancers),
   reducer: rootReducer,
   middleware: getDefaultMiddleware => getDefaultMiddleware(defaultMiddlewareOptions),
 });
