@@ -36,11 +36,11 @@
   },
   "devDependencies": {
     "@types/jsan": "^3.1.5",
-    "expo": "~50.0.17",
-    "expo-module-scripts": "^3.4.2",
+    "expo": "~51.0.18",
+    "expo-module-scripts": "^3.5.2",
     "patch-package": "^8.0.0",
     "redux": "^5.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.3"
   },
   "peerDependencies": {
     "expo": "*",
