@@ -30,55 +30,39 @@ yarn add redux-devtools-expo-dev-plugin
 
 ### Link the DevTools to Redux
 
-There are multiple ways of using this package depending if you're using Redux Toolkit, or standard Redux with other store enhancers (middlewares) or not.
+There are multiple ways of using this package depending if you're using Redux Toolkit or legacy Redux.
 
 #### Using Redux Toolkit
-Let's suppose your store looks something like this:
 
-```ts
-import { configureStore } from '@reduxjs/toolkit';
+You need to modify your call to `configureStore` to disable the built in devtools (by passing in `devTools: false`) and add in the Expo Devtools plugin enhancer (by concatenating the `devToolsEnhancer()`).
 
-const defaultMiddlewareOptions = {
-  serializableCheck: false,
-  immutableCheck,
-};
+Your call to `configureStore` will end up looking like this:
 
-const middlewares = [apiSlice.middleware, resourcesApiSlice.middleware];
+```javascript
+import devToolsEnhancer from "redux-devtools-expo-dev-plugin";
 
 const store = configureStore({
   reducer: rootReducer,
-  middleware: getDefaultMiddleware => getDefaultMiddleware(defaultMiddlewareOptions).concat(middlewares),
+  devTools: false,
+  enhancers: (getDefaultEnhancers) =>
+    getDefaultEnhancers().concat(devToolsEnhancer()),
 });
 ```
 
-After adding the plugin it should look something like this:
+The `enhancers` property will call `getDefaultEnhancers()` to get the default enhancers from Redux Toolkit and then concatenate the `devToolsEnhancer` to the end. If you already have some other enhancers, such as the one for Redux Saga, then you should make sure `devToolsEnhancer` is the last in the list.
 
+You can also pass in options for the `devToolsEnhancer` such as:
 
-```ts
-import { StoreEnhancer, configureStore } from '@reduxjs/toolkit';
-import devToolsEnhancer from 'redux-devtools-expo-dev-plugin';
-import { applyMiddleware } from '@reduxjs/toolkit';
-
-const defaultMiddlewareOptions = {
-  serializableCheck: false,
-  immutableCheck,
-};
-
-const middlewareEnhancer = applyMiddleware(
-  apiSlice.middleware,
-  resourcesApiSlice.middleware,
-  resetToolbarMiddleware
-);
-
-const store = configureStore({
-  enhancers: getDefaultEnhancers =>
-    getDefaultEnhancers().concat(middlewareEnhancer, devToolsEnhancer() as StoreEnhancer),
-  reducer: rootReducer,
-  middleware: getDefaultMiddleware => getDefaultMiddleware(defaultMiddlewareOptions),
-});
+```javascript
+devToolsEnhancer({ trace: true });
 ```
 
-#### `redux` without other enhancers
+#### Legacy installation with `redux` package
+
+If you have the legacy basic [store](http://redux.js.org/docs/api/createStore.html) as described in the official [redux-docs](http://redux.js.org/index.html) then the installation is as follows:
+
+<details>
+<summary>Click me to view the legacy installation instructions</summary>
 
 If you have the legacy basic [store](http://redux.js.org/docs/api/createStore.html) as described in the official [redux-docs](http://redux.js.org/index.html), simply replace:
 
@@ -103,10 +87,6 @@ import { createStore } from "redux";
 import { devToolsEnhancer } from "redux-devtools-expo-dev-plugin";
 const store = createStore(reducer, devToolsEnhancer({ trace: true }));
 ```
-
-> Note: passing enhancer as last argument requires redux@>=3.1.0
-
-#### `redux` with other enhancers
 
 If you setup your store with [middlewares and enhancers](http://redux.js.org/docs/api/applyMiddleware.html) like [redux-saga](https://github.com/redux-saga/redux-saga) and similar, it is crucial to use `composeWithDevTools` export. Otherwise, actions dispatched from Redux DevTools will not flow to your middlewares.
 
@@ -155,6 +135,8 @@ const store = createStore(
   ),
 );
 ```
+
+</details>
 
 ## Using the DevTools
 

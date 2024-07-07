@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== "production") {
   devtoolsEnhancer = require("./devtools").default;
   composeWithDevTools = require("./devtools").composeWithDevTools;
 } else {
-  devtoolsEnhancer = () => undefined;
+  devtoolsEnhancer = () => (next) => next;
   composeWithDevTools = compose;
 }
 

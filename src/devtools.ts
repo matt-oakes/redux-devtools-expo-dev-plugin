@@ -507,7 +507,7 @@ class DevToolsEnhancer<S, A extends Action<string>> {
 
 export default <S, A extends Action<string>>(
   options?: Options<S, A>,
-): StoreEnhancer | undefined => new DevToolsEnhancer<S, A>().enhance(options);
+): StoreEnhancer => new DevToolsEnhancer<S, A>().enhance(options);
 
 const compose =
   (options: Options<unknown, Action<string>>) =>
