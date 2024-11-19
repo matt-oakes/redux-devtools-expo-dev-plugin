@@ -1,6 +1,6 @@
 {
   "name": "redux-devtools-expo-dev-plugin",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "description": "The full Redux DevTools for Expo as a dev plugin",
   "homepage": "https://github.com/matt-oakes/redux-devtools-expo-dev-plugin",
   "license": "MIT",
