@@ -9,17 +9,17 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.2.6",
-    "expo": "^51.0.18",
-    "expo-status-bar": "~1.12.1",
-    "react": "18.2.0",
-    "react-native": "0.74.3",
-    "react-redux": "^9.1.1",
-    "redux-devtools-expo-dev-plugin": "^0.2.0"
+    "@reduxjs/toolkit": "^2.3.0",
+    "expo": "^52.0.7",
+    "expo-status-bar": "~2.0.0",
+    "react": "18.3.1",
+    "react-native": "0.76.2",
+    "react-redux": "^9.1.2",
+    "redux-devtools-expo-dev-plugin": "^0.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.4",
-    "@types/react": "~18.2.79",
+    "@babel/core": "^7.26.0",
+    "@types/react": "~18.3.12",
     "typescript": "~5.5.3"
   },
   "private": true
