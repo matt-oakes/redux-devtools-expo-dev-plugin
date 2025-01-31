@@ -4,6 +4,7 @@ import { createStore, compose, applyMiddleware } from "redux";
 import { persistReducer, persistStore } from "redux-persist";
 
 import { api } from "../middlewares/api";
+import { createRNIDEProxyClientAsync } from "../middlewares/radon_proxy";
 import { rootReducer } from "../reducers";
 
 const persistConfig = {
@@ -35,7 +36,7 @@ export default function configureStore() {
   const store = createStore(
     persistedReducer,
     /// @ts-expect-error
-    composeEnhancers(applyMiddleware(...middlewares, api)),
+    composeEnhancers(applyMiddleware(...middlewares, api())),
   );
   const persistor = persistStore(store);
   return { store, persistor };
