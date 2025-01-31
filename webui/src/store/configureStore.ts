@@ -35,7 +35,7 @@ export default function configureStore() {
   const store = createStore(
     persistedReducer,
     /// @ts-expect-error
-    composeEnhancers(applyMiddleware(...middlewares, api)),
+    composeEnhancers(applyMiddleware(...middlewares, api())),
   );
   const persistor = persistStore(store);
   return { store, persistor };
