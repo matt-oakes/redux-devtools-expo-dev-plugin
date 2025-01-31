@@ -8,7 +8,7 @@ let createDevToolsEnhancer: typeof import("./devtools").createDevToolsEnhancer;
 let devtoolsEnhancer: ReturnType<typeof createDevToolsEnhancer>;
 
 if (process.env.NODE_ENV !== "production") {
-  const getDevToolsPluginClientAsync = require('expo/devtools');
+  const getDevToolsPluginClientAsync = require('expo/devtools').getDevToolsPluginClientAsync;
   const createDevToolsEnhancer = require("./devtools").createDevToolsEnhancer;
 
   devtoolsEnhancer = createDevToolsEnhancer(() => getDevToolsPluginClientAsync("redux-devtools-expo-dev-plugin"));
