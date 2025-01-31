@@ -17,10 +17,6 @@ import {
   LocalFilter,
   State,
 } from "@redux-devtools/utils";
-import {
-  DevToolsPluginClient,
-  getDevToolsPluginClientAsync,
-} from "expo/devtools";
 import { stringify, parse } from "jsan";
 import {
   Action,
@@ -31,6 +27,7 @@ import {
 } from "redux";
 
 import configureStore from "./configureStore";
+import { ProxyClient, ProxyClientFactory } from "./types";
 
 function async(fn: () => unknown) {
   setTimeout(fn, 0);
@@ -160,12 +157,12 @@ type Message<S, A extends Action<string>> =
   | ActionMessage
   | DispatchMessage<S, A>;
 
-class DevToolsEnhancer<S, A extends Action<string>> {
+export class DevToolsEnhancer<S, A extends Action<string>> {
   // eslint-disable-next-line @typescript-eslint/ban-types
   store!: EnhancedStore<S, A, {}>;
   filters: LocalFilter | undefined;
   instanceId?: string;
-  devToolsPluginClient?: DevToolsPluginClient;
+  proxyClient?: ProxyClient;
   sendTo?: string;
   instanceName: string | undefined;
   appInstanceId!: string;
@@ -186,6 +183,13 @@ class DevToolsEnhancer<S, A extends Action<string>> {
   lastAction?: unknown;
   paused?: boolean;
   locked?: boolean;
+  createProxyClient: ProxyClientFactory;
+
+  constructor(
+    proxyClientFactory: ProxyClientFactory,
+  ) {
+    this.createProxyClient = proxyClientFactory;
+  }
 
   getInstanceId() {
     if (!this.instanceId) {
@@ -276,7 +280,7 @@ class DevToolsEnhancer<S, A extends Action<string>> {
     } else if (action) {
       message.action = action as ActionCreatorObject[];
     }
-    this.devToolsPluginClient?.sendMessage("log", message);
+    this.proxyClient?.sendMessage("log", message);
   }
 
   dispatchRemotely(
@@ -374,9 +378,9 @@ class DevToolsEnhancer<S, A extends Action<string>> {
   stop = async () => {
     this.started = false;
     this.isMonitored = false;
-    if (!this.devToolsPluginClient) return;
-    await this.devToolsPluginClient.closeAsync();
-    this.devToolsPluginClient = undefined;
+    if (!this.proxyClient) return;
+    await this.proxyClient.closeAsync();
+    this.proxyClient = undefined;
   };
 
   start = () => {
@@ -384,11 +388,9 @@ class DevToolsEnhancer<S, A extends Action<string>> {
 
     (async () => {
       try {
-        this.devToolsPluginClient = await getDevToolsPluginClientAsync(
-          "redux-devtools-expo-dev-plugin",
-        );
+        this.proxyClient = await this.createProxyClient();
 
-        this.devToolsPluginClient.addMessageListener(
+        this.proxyClient.addMessageListener(
           "respond",
           (data: Message<S, A>) => {
             this.handleMessages(data);
@@ -505,16 +507,11 @@ class DevToolsEnhancer<S, A extends Action<string>> {
   };
 }
 
-export default <S, A extends Action<string>>(
-  options?: Options<S, A>,
-): StoreEnhancer => new DevToolsEnhancer<S, A>().enhance(options);
-
 const compose =
+  (devToolsEnhancer: DevToolsEnhancer<unknown, Action<string>>) =>
   (options: Options<unknown, Action<string>>) =>
   (...funcs: StoreEnhancer[]) =>
   (...args: unknown[]) => {
-    const devToolsEnhancer = new DevToolsEnhancer();
-
     function preEnhancer(createStore: StoreEnhancerStoreCreator) {
       return <S, A extends Action<string>>(
         reducer: Reducer<S, A>,
@@ -539,14 +536,25 @@ const compose =
     );
   };
 
-export function composeWithDevTools(
-  ...funcs: [Options<unknown, Action<string>>] | StoreEnhancer[]
+export function createComposeWithDevTools(
+  proxyClientFactory: ProxyClientFactory,
 ) {
-  if (funcs.length === 0) {
-    return new DevToolsEnhancer().enhance();
-  }
-  if (funcs.length === 1 && typeof funcs[0] === "object") {
-    return compose(funcs[0]);
-  }
-  return compose({})(...(funcs as StoreEnhancer[]));
+  const devtoolsEnhancer = new DevToolsEnhancer<unknown, Action<string>>(
+    proxyClientFactory,
+  );
+  return function (
+    ...funcs: [Options<unknown, Action<string>>] | StoreEnhancer[]
+  ) {
+    if (funcs.length === 0) {
+      return devtoolsEnhancer.enhance();
+    }
+    if (funcs.length === 1 && typeof funcs[0] === "object") {
+      return compose(devtoolsEnhancer)(funcs[0]);
+    }
+    return compose(devtoolsEnhancer)({})(...(funcs as StoreEnhancer[]));
+  };
 }
+
+export const createDevToolsEnhancer = (createProxyClient: ProxyClientFactory) => <S, A extends Action<string>>(
+  options?: Options<S, A>,
+): StoreEnhancer => new DevToolsEnhancer<S, A>(createProxyClient).enhance(options);

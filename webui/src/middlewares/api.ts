@@ -10,23 +10,21 @@ import {
   UPDATE_STATE,
   UpdateReportsRequest,
 } from "@redux-devtools/app-core";
-import {
-  DevToolsPluginClient,
-  getDevToolsPluginClientAsync,
-} from "expo/devtools";
+import { getDevToolsPluginClientAsync } from "expo/devtools";
 import { stringify } from "jsan";
 import { Dispatch, MiddlewareAPI } from "redux";
 
 import { EmitAction, StoreAction } from "../actions";
 import * as actions from "../constants/socketActionTypes";
 import { StoreState } from "../reducers";
+import { ProxyClient, ProxyClientFactory } from "./types";
 import { nonReduxDispatch } from "../utils/monitorActions";
 
-let devToolsPluginClient: DevToolsPluginClient | undefined;
+let proxyClient: ProxyClient | undefined;
 let store: MiddlewareAPI<Dispatch<StoreAction>, StoreState>;
 
 function emit({ message: type, instanceId, action, state }: EmitAction) {
-  devToolsPluginClient?.sendMessage("respond", {
+  proxyClient?.sendMessage("respond", {
     type,
     action,
     state,
@@ -117,7 +115,7 @@ function monitoring(request: MonitoringRequest) {
     instanceId === instances.selected &&
     (request.type === "ACTION" || request.type === "STATE")
   ) {
-    devToolsPluginClient?.sendMessage("respond", {
+    proxyClient?.sendMessage("respond", {
       type: "SYNC",
       state: stringify(instances.states[instanceId]),
       id: request.id,
@@ -126,17 +124,15 @@ function monitoring(request: MonitoringRequest) {
   }
 }
 
-async function connect() {
+async function connect(createProxyClient: ProxyClientFactory) {
   if (process.env.NODE_ENV === "test") return;
   try {
-    devToolsPluginClient = await getDevToolsPluginClientAsync(
-      "redux-devtools-expo-dev-plugin",
-    );
+    proxyClient = await createProxyClient();
 
     const watcher = (request: UpdateReportsRequest) => {
       store.dispatch({ type: UPDATE_REPORTS, request });
     };
-    devToolsPluginClient.addMessageListener("log", (data) => {
+    proxyClient.addMessageListener("log", (data) => {
       monitoring(data as MonitoringRequest);
       watcher(data as UpdateReportsRequest);
     });
@@ -151,20 +147,24 @@ async function connect() {
   }
 }
 
-export function api(inStore: MiddlewareAPI<Dispatch<StoreAction>, StoreState>) {
-  store = inStore;
-  connect();
+export function api(
+  createProxyClient: ProxyClientFactory = () => getDevToolsPluginClientAsync("redux-devtools-expo-dev-plugin"),
+) {
+  return function (inStore: MiddlewareAPI<Dispatch<StoreAction>, StoreState>) {
+    store = inStore;
+    connect(createProxyClient);
 
-  return (next: Dispatch<StoreAction>) => (action: StoreAction) => {
-    const result = next(action);
-    switch (action.type) {
-      case actions.EMIT:
-        if (devToolsPluginClient) emit(action);
-        break;
-      case LIFTED_ACTION:
-        dispatchRemoteAction(action);
-        break;
-    }
-    return result;
+    return (next: Dispatch<StoreAction>) => (action: StoreAction) => {
+      const result = next(action);
+      switch (action.type) {
+        case actions.EMIT:
+          if (proxyClient) emit(action);
+          break;
+        case LIFTED_ACTION:
+          dispatchRemoteAction(action);
+          break;
+      }
+      return result;
+    };
   };
 }
