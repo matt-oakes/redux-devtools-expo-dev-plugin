@@ -31,19 +31,19 @@
   ],
   "dependencies": {
     "@redux-devtools/instrument": "^2.2.0",
-    "@redux-devtools/utils": "^3.0.0",
+    "@redux-devtools/utils": "^3.1.1",
     "jsan": "^3.1.14"
   },
   "devDependencies": {
     "@types/jsan": "^3.1.5",
-    "expo": "~52.0.3",
-    "expo-module-scripts": "^4.0.2",
+    "expo": "~53.0.7",
+    "expo-module-scripts": "^4.1.6",
     "patch-package": "^8.0.0",
     "redux": "^5.0.1",
-    "typescript": "^5.5.3"
+    "typescript": "^5.8.3"
   },
   "peerDependencies": {
-    "expo": ">=52",
+    "expo": ">=53",
     "redux": "*"
   }
 }

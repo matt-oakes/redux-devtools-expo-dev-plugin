@@ -397,11 +397,13 @@ class DevToolsEnhancer<S, A extends Action<string>> {
 
         this.started = true;
         this.relay("START");
-      } catch (e) {
-        console.warn(
-          "Failed to setup Expo dev plugin client from Redux DevTools enhancer: " +
-            e.toString(),
-        );
+      } catch (e: unknown) {
+        if (e instanceof Error) {
+          console.warn(
+            "Failed to setup Expo dev plugin client from Redux DevTools enhancer: " +
+              e.toString(),
+          );
+        }
         this.stop();
       }
     })();
