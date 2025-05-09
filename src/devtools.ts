@@ -146,7 +146,7 @@ interface ActionMessage {
 
 interface DispatchMessage<S, A extends Action<string>> {
   readonly type: "DISPATCH";
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   readonly action: LiftedAction<S, A, {}>;
 }
 
@@ -161,7 +161,7 @@ type Message<S, A extends Action<string>> =
   | DispatchMessage<S, A>;
 
 class DevToolsEnhancer<S, A extends Action<string>> {
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   store!: EnhancedStore<S, A, {}>;
   filters: LocalFilter | undefined;
   instanceId?: string;
@@ -297,14 +297,12 @@ class DevToolsEnhancer<S, A extends Action<string>> {
     if (
       message.type === "IMPORT" ||
       (message.type === "SYNC" &&
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         this.instanceId &&
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
         message.id !== this.instanceId)
     ) {
       this.store.liftedStore.dispatch({
         type: "IMPORT_STATE",
-        // eslint-disable-next-line @typescript-eslint/ban-types
+        // eslint-disable-next-line @typescript-eslint/no-empty-object-type
         nextLiftedState: parse(message.state) as LiftedState<S, A, {}>,
       });
     } else if (message.type === "UPDATE") {
@@ -419,7 +417,7 @@ class DevToolsEnhancer<S, A extends Action<string>> {
     return false;
   };
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   monitorReducer = (state = {}, action: LiftedAction<S, A, {}>) => {
     this.lastAction = action.type;
     if (!this.started && this.sendOnError === 2 && this.store.liftedStore)
@@ -447,7 +445,7 @@ class DevToolsEnhancer<S, A extends Action<string>> {
     return state;
   };
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   handleChange(state: S, liftedState: LiftedState<S, A, {}>, maxAge: number) {
     if (this.checkForReducerErrors(liftedState)) return;
 
