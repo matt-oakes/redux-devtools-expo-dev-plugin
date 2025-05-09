@@ -36,8 +36,8 @@
   },
   "devDependencies": {
     "@types/jsan": "^3.1.5",
-    "expo": "~53.0.7",
-    "expo-module-scripts": "^4.1.6",
+    "expo": "~53.0.9",
+    "expo-module-scripts": "^4.1.7",
     "patch-package": "^8.0.0",
     "redux": "^5.0.1",
     "typescript": "^5.8.3"
